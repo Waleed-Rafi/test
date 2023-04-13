@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./answer.module.css";
+import abc from "./output-onlinegiftools.gif";
+import Image from "next/image";
 
 interface AnswerProps {
   text: string;
   userChat: any;
+  loading: any;
 }
 
 interface ChatInterface {
@@ -11,7 +14,7 @@ interface ChatInterface {
   message: string;
 }
 
-export const Answer: React.FC<AnswerProps> = ({ text, userChat }) => {
+export const Answer: React.FC<AnswerProps> = ({ text, userChat, loading }) => {
   const containerRef = useRef<any>(null);
   const [words, setWords] = useState<string[]>([]);
 
@@ -55,6 +58,15 @@ export const Answer: React.FC<AnswerProps> = ({ text, userChat }) => {
           </span>
         </div>
       ))}
+      {loading && (
+        <div>
+          <Image
+            src={abc}
+            alt="none"
+            style={{ height: "50px", width: "90px" }}
+          />
+        </div>
+      )}
       {/* <div className={styles.chatContainer}>
         <p>{words}</p>
       </div> */}
