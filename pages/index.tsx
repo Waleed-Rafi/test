@@ -13,6 +13,7 @@ import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<any>(null);
 
   const [query, setQuery] = useState<string>("");
   const [chunks, setChunks] = useState<PGChunk[]>([]);
@@ -24,6 +25,10 @@ export default function Home() {
   const [matchCount, setMatchCount] = useState<number>(5);
   const [apiKey, setApiKey] = useState<string>("");
   const [userChat, setUserChat] = useState<Object[]>([]);
+
+  useEffect(() => {
+    containerRef.current!.scrollTop = containerRef.current!.scrollHeight;
+  }, [userChat]);
 
   const handleSearch = async () => {
     if (!apiKey) {
@@ -219,7 +224,24 @@ export default function Home() {
       <div className="flex flex-col h-screen">
         <Navbar />
         <div className="flex-1 overflow-auto">
-          <div className="mx-auto flex h-full w-full max-w-[750px] flex-col items-center px-3 pt-4 sm:pt-8">
+          <div className="mx-auto flex h-full w-full max-w-[750px] flex-col items-center px-3 pt-4 pb-4 sm:pt-8">
+            <div
+              ref={containerRef}
+              className="mt-1"
+              style={{
+                width: "100%",
+                height: "90vh",
+                marginBottom: "10px",
+                overflowY: "auto",
+                overflowX: "hidden",
+                borderRadius: "7px",
+              }}
+            >
+              {/* <div className="font-bold text-2xl mb-2">Answer</div> */}
+              {/* {userChat.length ? ( */}
+              <Answer text={answer} userChat={userChat} loading={loading} />
+              {/* ) : null} */}
+            </div>
             {/* <button
               className="mt-4 flex cursor-pointer items-center space-x-2 rounded-full border border-zinc-600 px-3 py-1 text-sm hover:opacity-50"
               onClick={() => setShowSettings(!showSettings)}
@@ -265,12 +287,13 @@ export default function Home() {
               </div>
             )} */}
 
-            <div className="relative w-full mt-4">
+            <div className="relative w-full">
               <IconSearch className="absolute top-3 w-10 left-1 h-6 rounded-full opacity-50 sm:left-3 sm:top-4 sm:h-8" />
 
               <input
                 ref={inputRef}
-                className="h-12 w-full rounded-full border border-zinc-600 pr-12 pl-11 focus:border-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-800 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg"
+                className="h-12 w-full border pr-12 pl-11 focus:border-zinc-800 focus:ring-1 sm:h-16 sm:py-2 sm:pr-16 sm:pl-16 sm:text-lg"
+                style={{ borderRadius: "5px" }}
                 type="text"
                 placeholder="What’s the benefits of strength training?"
                 value={query}
@@ -284,13 +307,6 @@ export default function Home() {
                   className="absolute right-2 top-2.5 h-7 w-7 rounded-full bg-blue-500 p-1 hover:cursor-pointer hover:bg-blue-600 sm:right-3 sm:top-3 sm:h-10 sm:w-10 text-white"
                 />
               </button>
-            </div>
-
-            <div className="mt-6" style={{ width: "100%" }}>
-              {/* <div className="font-bold text-2xl mb-2">Answer</div> */}
-              {userChat.length ? (
-                <Answer text={answer} userChat={userChat} />
-              ) : null}
             </div>
 
             {
